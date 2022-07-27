@@ -5,6 +5,7 @@ import * as actions from "../../store/actions";
 import './Login.scss';
 
 import { handleLoginApi } from '../../services/userService';
+import { userLoginSuccess } from '../../store/actions';
 
 class Login extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class Login extends Component {
             username: '',
             password: '',
             isShowPassword: false,
+            errMessage: '',
         }
     }
 
@@ -29,12 +31,29 @@ class Login extends Component {
     }
 
     handleLogin = async () => {
+        this.setState({
+            errMessage: '',
+        });
         try {
-            await handleLoginApi(this.state.username, this.state.password);
+            let data = await handleLoginApi(this.state.username, this.state.password);
+            if (data && data.errCode !== 0) {
+                this.setState({
+                    errMessage: data.message,
+                })
+            }
+            if (data && data.errCode === 0) {
+                this.props.userLoginSuccess(data.user)
+                console.log('login successed');
+            }
         }
-        catch (e) {
-            console.log(e);
-
+        catch (error) {
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message,
+                    })
+                }
+            }
         }
     }
 
@@ -76,6 +95,9 @@ class Login extends Component {
                                 </span>
                             </div>
                         </div>
+                        <div className="col-12" style={{ color: 'red' }}>
+                            {this.state.errMessage}
+                        </div>
                         <div className="col-12">
                             <button className='btn-login' onClick={() => { this.handleLogin() }}>Login</button>
                         </div>
@@ -105,8 +127,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        userLoginFail: () => dispatch(actions.userLoginFail()),
+        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo))
     };
 };
 

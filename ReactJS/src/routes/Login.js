@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
 
-import * as actions from "../store/actions";
+// import * as actions from "../store/actions";
 import { KeyCodeUtils, LanguageUtils } from "../utils";
 
 import userIcon from '../../src/assets/images/user.svg';
@@ -51,7 +51,7 @@ class Login extends Component {
     processLogin = () => {
         const { username, password } = this.state;
 
-        const { adminLoginSuccess, adminLoginFail } = this.props;
+        const { adminLoginSuccess } = this.props;
         let loginBody = {
             username: 'admin',
             password: '123456'
@@ -165,8 +165,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        // adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
+        // adminLoginFail: () => dispatch(actions.adminLoginFail()),
     };
 };
 

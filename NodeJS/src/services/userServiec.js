@@ -32,7 +32,7 @@ let handleUserLogin = (email, password) => {
             }
             else {
                 userData.errCode = 1;
-                userData.errMessage = "Your email has exited. Please try again";
+                userData.errMessage = "Your email isn't exist in your system. Please try other email";
             }
             resolve(userData);
 
