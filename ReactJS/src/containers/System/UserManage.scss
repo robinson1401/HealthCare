@@ -1,3 +1,7 @@
+i {
+    margin-right: 2px;
+}
+
 .btn-edit {
     width     : 50px;
     border    : none;
@@ -21,5 +25,47 @@
     &:hover {
         background-color: transparent !important;
         color           : rgb(200, 255, 0) !important;
+    }
+}
+
+.modal-user-container {
+    .modal-content {
+        .modal-header {
+            button {
+                background-color: transparent !important;
+                color           : white;
+                border          : none;
+                font-size       : 27px;
+
+                &:hover {
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+
+    .modal-user-body {
+        display  : flex;
+        gap      : 15px;
+        flex-wrap: wrap;
+
+        .input-container {
+            display       : flex;
+            flex-direction: column;
+            width         : 49%;
+
+            &.max-width-input {
+                width: 100%;
+            }
+
+            input {
+                border-radius: 3px;
+                height       : 30px;
+                border       : 1px solid grey;
+                outline      : none;
+                padding      : 0 10px;
+            }
+        }
+
     }
 }
