@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import "./UserManage.scss";
-import { getAllUsers, createNewUserService } from '../../services/userService';
+import { getAllUsers, createNewUserService, deleteUserService } from '../../services/userService';
 import ModalUser from './ModalUser';
-import { createNew } from 'typescript';
+import { emitter } from '../../utils/emitter';
 class UserManage extends Component {
 
     constructor(props) {
@@ -47,6 +47,8 @@ class UserManage extends Component {
                 this.setState({
                     isOpenModalUser: false,
                 });
+
+                emitter.emit('ENVENT_CLEAR_MODAL_DATA');
             }
         } catch (err) {
             console.log(err);
@@ -54,8 +56,21 @@ class UserManage extends Component {
 
     }
 
+    handleDeleteUser = async (user) => {
+        try {
+            let res = await deleteUserService(user.id)
+            if (res && res.errCode === 0) {
+                await this.getAllUsersFromReact();
+            } else {
+                alert(res.errMessage);
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
     render() {
-        console.log('check state', this.state);
         let arrayUsers = this.state.arrayUsers;
         return (
             <div className="user-container">
@@ -93,7 +108,7 @@ class UserManage extends Component {
                                             <td>{item.address}</td>
                                             <td>
                                                 <button className='btn-edit'><i className="fas fa-pencil-alt"></i></button>
-                                                <button className='btn-delete'><i className="fas fa-trash-alt"></i></button>
+                                                <button className='btn-delete' onClick={() => { this.handleDeleteUser(item) }}><i className="fas fa-trash-alt"></i></button>
                                             </td>
                                         </tr>
                                     )
