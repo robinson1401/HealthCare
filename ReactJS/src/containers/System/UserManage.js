@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import "./UserManage.scss";
-import { getAllUsers } from '../../services/userService';
+import { getAllUsers, createNewUserService } from '../../services/userService';
 import ModalUser from './ModalUser';
+import { createNew } from 'typescript';
 class UserManage extends Component {
 
     constructor(props) {
@@ -15,6 +16,10 @@ class UserManage extends Component {
     }
 
     async componentDidMount() {
+        await this.getAllUsersFromReact();
+    }
+
+    getAllUsersFromReact = async (req, res) => {
         let response = await getAllUsers('ALL');
         if (response && response.errCode === 0) {
             this.setState({
@@ -32,6 +37,23 @@ class UserManage extends Component {
         this.setState({ isOpenModalUser: !this.state.isOpenModalUser, });
     };
 
+    createNewUser = async (data) => {
+        try {
+            let response = await createNewUserService(data);
+            if (response && response.errCode) {
+                alert(response.errMessage);
+            } else {
+                await this.getAllUsersFromReact();
+                this.setState({
+                    isOpenModalUser: false,
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
     render() {
         console.log('check state', this.state);
         let arrayUsers = this.state.arrayUsers;
@@ -40,6 +62,7 @@ class UserManage extends Component {
                 <ModalUser
                     isOpen={this.state.isOpenModalUser}
                     toggleFromParent={this.toggleUserModal}
+                    createNewUser={this.createNewUser}
                 />
                 <div className='title text-center'>
                     Manage users
@@ -52,7 +75,7 @@ class UserManage extends Component {
                 </div>
                 <div className="users-table mt-3 mx-1">
                     <table class="table table-striped table-dark">
-                        <thead>
+                        <tbody>
                             <tr>
                                 <th scope="col">Email</th>
                                 <th scope="col">First name</th>
@@ -60,8 +83,6 @@ class UserManage extends Component {
                                 <th scope="col">Address</th>
                                 <th scope="col">Action</th>
                             </tr>
-                        </thead>
-                        <tbody>
                             {
                                 arrayUsers && arrayUsers.map((item, index) => {
                                     return (

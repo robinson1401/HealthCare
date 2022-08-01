@@ -107,25 +107,27 @@ let createNewUser = (data) => {
             if (check === true) {
                 resolve({
                     errCode: 1,
-                    message: 'Your email has already been verified'
+                    errMessage: 'Your email has already been verified'
                 })
-            }
-            let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-            await db.User.create({
-                email: data.email,
-                password: hashPasswordFromBcrypt,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                address: data.address,
-                phonenumber: data.phonenumber,
-                gender: data.gender === '1' ? true : false,
-                roleId: data.roleId,
-            })
+            } else {
 
-            resolve({
-                errCode: 0,
-                message: 'Ok'
-            });
+                let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+                await db.User.create({
+                    email: data.email,
+                    password: hashPasswordFromBcrypt,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    phonenumber: data.phonenumber,
+                    gender: data.gender === '1' ? true : false,
+                    roleId: data.roleId,
+                })
+
+                resolve({
+                    errCode: 0,
+                    message: 'Ok'
+                });
+            }
         }
         catch (err) {
             reject(err);
@@ -141,7 +143,7 @@ let deleteUser = (userId) => {
         if (!user) {
             resolve({
                 errCode: 2,
-                errMessage: `The user isn't exist`
+                message: `The user isn't exist`
             })
         }
         await db.User.destroy({
@@ -150,7 +152,7 @@ let deleteUser = (userId) => {
 
         resolve({
             errCode: 0,
-            errMessage: `The user is deleted`
+            message: `The user is deleted`
         })
     })
 }
@@ -173,7 +175,7 @@ let editUser = (data) => {
 
                 resolve({
                     errCode: 0,
-                    message: 'Updated user successfully'
+                    errMessage: 'Updated user successfully'
                 });
             }
             else {
