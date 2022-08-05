@@ -9,7 +9,7 @@ class HomeHeader extends Component {
             <div className='home-header-container'>
                 <div className='home-header-content'>
                     <div className='left-content'>
-                        <i class="fas fa-bars"></i>
+                        <i className="fas fa-bars"></i>
                         <div className='header-logo'></div>
                     </div>
                     <div className='center-content'>
@@ -30,7 +30,10 @@ class HomeHeader extends Component {
                             <div className='sub-title'>Khám sức khỏe tổng quát</div>
                         </div>
                     </div>
-                    <div className='right-content'></div>
+                    <div className='right-content'>
+                        <div className='support'><i className="fas fa-question"></i> Hỗ trợ</div>
+                        <div className='flag'>VN</div>
+                    </div>
                 </div>
             </div>
         );
